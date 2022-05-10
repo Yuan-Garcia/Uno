@@ -1,0 +1,254 @@
+import random
+'''cards = ["r0","r0","r1","r1","r2","r2","r3","r3","r4","r4","r5","r5","r6","r6","r7","r7","r8","r8","r9","r9",
+"rplus2","rplus2","rskip","rskip","rreverse","rreverse","b0","b0","b1","b1","b2","b2","b3","b3","b4","b4",
+"b5","b5","b6","b6","b7","b7","b8","b8","b9","b9","bplus2","bplus2","bskip","bskip","breverse",
+"breverse","y0","y0","y1","y1","y2","y2","y3","y3","y4","y4","y5","y5","y6","y6","y7","y7","y8","y8",
+"y9","y9","yplus2","yplus2","yskip","yskip","yreverse","yreverse","g0","g0","g1","g1","g2","g2","g3",
+"g3","g4","g4","g5","g5","g6","g6","g7","g7","g8","g8","g9","g9","gplus2","gplus2","gskip","gskip",
+"greverse","greverse","wild","wild","wild","wild","w_plus4","w_plus4","w_plus4","w_plus4"]'''
+
+'''cards = ["r0","r0","r1","r1","r2","r2","r3","r3","r4","r4","r5","r5","r6","r6","r7","r7","r8","r8","r9","r9",
+"rplus2","rplus2","rskip","rskip","b0","b0","b1","b1","b2","b2","b3","b3","b4","b4",
+"b5","b5","b6","b6","b7","b7","b8","b8","b9","b9","bplus2","bplus2","bskip","bskip",
+"y0","y0","y1","y1","y2","y2","y3","y3","y4","y4","y5","y5","y6","y6","y7","y7","y8","y8",
+"y9","y9","yplus2","yplus2","yskip","yskip","g0","g0","g1","g1","g2","g2","g3",
+"g3","g4","g4","g5","g5","g6","g6","g7","g7","g8","g8","g9","g9","gplus2","gplus2","gskip","gskip",
+"wild","wild","wild","wild","w_plus4","w_plus4","w_plus4","w_plus4"]'''
+print(''' 
+ _        __   _                            _                    
+\ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___     
+ \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  
+  \ V  V /  __/ | (_| (_) | | | | | |  __/ | || (_) | 
+   \_/\_/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/ 
+
+      ___           ___           ___     
+     /\__\         /\__\         /\  \    
+    /:/  /        /::|  |       /::\  \   
+   /:/  /        /:|:|  |      /:/\:\  \  
+  /:/  /  ___   /:/|:|  |__   /:/  \:\  \ 
+ /:/__/  /\__\ /:/ |:| /\__\ /:/__/ \:\__\ 
+ \:\  \ /:/  / \/__|:|/:/  / \:\  \ /:/  /
+  \:\  /:/  /      |:/:/  /   \:\  /:/  / 
+   \:\/:/  /       |::/  /     \:\/:/  /  
+    \::/  /        /:/  /       \::/  /   
+     \/__/         \/__/         \/__/    
+	''')
+
+      
+print("The game is for 2-10 players, ages 7 and over. Every player starts with seven") 
+print("cards, and they are dealt face down. The rest of the cards are placed in a Draw")
+print("Pile face down. Next to the pile a space should be designated for a Discard Pile.")
+print("The top card should beplaced in the Discard Pile, and the game begins!")
+print("Every player views his/her cards and tries to match the card in the Discard Pile.")
+print("You have to match either by the number, color, or symbol/action")
+print("If the player has no matches , they must draw a card from the Draw pile ")
+print("(we do that automatically). If that card can be played, play it (also done") 
+print("automatically). Otherwise, the game moves on to the next person in turn.")
+
+cards = ["r0","r0","r1","r1","r2","r2","r3","r3","r4","r4","r5","r5","r6","r6","r7","r7","r8","r8","r9","r9",
+"b0","b0","b1","b1","b2","b2","b3","b3","b4","b4", "b5","b5","b6","b6","b7","b7","b8","b8","b9","b9",
+"y0","y0","y1","y1","y2","y2","y3","y3","y4","y4","y5","y5","y6","y6","y7","y7","y8","y8",
+"y9","y9","g0","g0","g1","g1","g2","g2","g3",
+"g3","g4","g4","g5","g5","g6","g6","g7","g7","g8","g8","g9","g9"]
+turn = 0
+cards_put_down = []
+
+#print(random.randint(0,len(cards)-1))
+#learning how to use randint
+
+random.shuffle(cards)
+#shuffles the cards for extra security
+def skip(): 
+	global turn
+	turn = (turn + 1)%4
+
+def turn_plus_one_outputs():
+	global turn
+	return((turn + 1)%4)
+
+def random_7_cards():
+	seven_random_cards = []
+	for _ in range(7):
+		random_num = random.randint(0,len(cards)-1)
+		#makes a new random number every iteration
+		seven_random_cards.append(cards.pop(random_num))
+		#takes the random number, and then it "pop's" it, and then we append it into temp list
+	return(seven_random_cards)
+	# --IMPORTANT NOTE-- this MODIFIES cards, so cards have been DEALT OUT of the deck and INTO someones hand
+
+player_hand = random_7_cards()
+AI_one_hand = random_7_cards()
+AI_two_hand = random_7_cards()
+AI_three_hand = random_7_cards()
+#deals out starting cards
+
+def next_persons_hand_to_play():
+	return[player_hand, AI_one_hand, AI_two_hand, AI_three_hand][turn_plus_one_outputs()]#(turn + 1)%3]
+
+def plus_two():
+	"adds 2 and skips the next person's turn"
+	for _ in range(2):
+		next_persons_hand_to_play.append(cards.pop(len(cards) - 1))
+		#adds one card to the next person
+		skip()
+	
+def wild_player(colour):
+	while (colour == "r" or "b" or "y" or "g") == False:
+		card_chosen = input("sorry, that's not a valid colour, please try again: ")
+	else:
+		cards_put_down.append(colour)
+		#adds the card chosen to the cards put down
+
+def wild_AI(colour):
+		cards_put_down.append(colour)
+		#adds the colour alone chosen to the cards put down, -----NOT CHECKED----
+		temp = [player_hand, AI_one_hand, AI_two_hand, AI_three_hand][turn]
+		temp.remove("wild")
+		#removes card (may or may not be neccecary depending on if i put takling out in AI, probably will)
+
+cards_put_down.append(cards.pop(len(cards) - 1))
+#takes the top card of randomized cards and pops it into cards_put_down 
+print("first card down: " + cards_put_down[len(cards_put_down) - 1])
+
+
+def plus_four():
+	for _ in range(4):
+		next_persons_hand_to_play.append(cards.pop(len(cards) - 1))
+		#adds one card to the next person
+	skip()
+
+def card_playable(card):
+	return(card[0] == cards_put_down[len(cards_put_down) - 1][0] or card[1:] == cards_put_down[len(cards_put_down) - 1][1:])
+
+def player_turn():
+	print(player_hand)
+	all_working_cards = [x for x in player_hand if card_playable(x)]
+	if (len(all_working_cards) == 0):
+		print("sorry, no cards avaliable to put down :( giving you an extra card")
+		new_card = (cards.pop(len(cards) - 1))
+		player_hand.append(new_card)
+		if not card_playable(new_card):
+			skip()
+		else:
+			print("The card you drew from the deck works! We will place it down :)")
+			cards_put_down.append(new_card)
+			#adds the card chosen to the cards put down
+			player_hand.remove(new_card)
+			#takes the card chosen out of your hand
+			skip()
+	else:
+		card_chosen = input("pick a card to put down: ")
+		while card_chosen not in player_hand or card_chosen not in all_working_cards:
+			card_chosen = input("sorry, that's not a valid card, please try again: ")
+		else:
+			cards_put_down.append(card_chosen)
+			#adds the card chosen to the cards put down
+			player_hand.remove(card_chosen)
+			#takes the card chosen out of your hand
+		skip()
+
+
+def AI_one():
+#This AI's just gonna pick a random card that works and is gonna put it down
+	all_working_cards = [x for x in AI_one_hand if card_playable(x)]
+	#checks if the first character is == to the first character of the most recent
+	#sets all_working_cards to a list of all the cards in AI_one_hand that are able to be put down	
+	if (len(all_working_cards) == 0):
+		new_card = (cards.pop(len(cards) - 1))
+		AI_one_hand.append(new_card)
+		print("AI 1 drew a card")
+		if not card_playable(new_card):
+			print("AI 1 has: " + str(len(AI_one_hand)) + " cards")
+			skip()
+		else:
+			print("The card that AI one drew from the deck works! We will place it down :)")
+			cards_put_down.append(new_card)
+			#adds the card chosen to the cards put down
+			AI_one_hand.remove(new_card)
+			#takes the card chosen out of your hand
+			print("AI 1 has: " + str(len(AI_one_hand)) + " cards")
+			skip()	
+	#this deals them a card and skips their turn, NEEDS TO BE CHANGED FOR WILD CARD AND PLUS 4
+	else:
+		random_num = random.randint(0,len(all_working_cards)-1)
+		#makes a new random number
+		all_working_cards_randompick = all_working_cards[random_num]
+		cards_put_down.append(all_working_cards_randompick)
+		#adds the RANDOM card chosen to the cards put down
+		AI_one_hand.remove(all_working_cards_randompick)
+		#takes the card chosen out of your hand
+		print("AI 1 put down: " + all_working_cards_randompick)
+		print("AI 1 has: " + str(len(AI_one_hand)) + " cards")
+		skip()
+
+def AI_two():
+#This AI's just gonna pick a random card that works and is gonna put it down
+	all_working_cards = [x for x in AI_two_hand if x[0] == cards_put_down[len(cards_put_down) - 1][0] or x[1:] == cards_put_down[len(cards_put_down) - 1][1:]]
+	#checks if the first character is == to the first character of the most recent
+	#sets all_working_cards to a list of all the cards in AI_two_hand that are able to be put down	
+	if (len(all_working_cards) == 0):
+		AI_two_hand.append(cards.pop(len(cards) - 1))
+		print("AI 2 drew a card")
+		skip()
+	#this deals them a card and skips their turn, NEEDS TO BE CHANGED FOR WILD CARD AND PLUS 4
+	else:
+		random_num = random.randint(0,len(all_working_cards)-1)
+		#makes a new random number
+		all_working_cards_randompick = all_working_cards[random_num]
+		cards_put_down.append(all_working_cards_randompick)
+		#adds the RANDOM card chosen to the cards put down
+		AI_two_hand.remove(all_working_cards_randompick)
+		#takes the card chosen out of your hand
+		print("AI 2 put down: " + all_working_cards_randompick)
+		print("AI 2 has: " + str(len(AI_two_hand)) + " cards")
+		skip()
+
+def AI_three():
+#This AI's just gonna pick a random card that works and is gonna put it down
+	all_working_cards = [x for x in AI_three_hand if x[0] == cards_put_down[len(cards_put_down) - 1][0] or x[1:] == cards_put_down[len(cards_put_down) - 1][1:]]
+	#checks if the first character is == to the first character of the most recent
+	#sets all_working_cards to a list of all the cards in AI_two_hand that are able to be put down	
+	if (len(all_working_cards) == 0):
+		AI_three_hand.append(cards.pop(len(cards) - 1))
+		print("AI 3 drew a card")
+		skip()
+	#this deals them a card and skips their turn, NEEDS TO BE CHANGED FOR WILD CARD AND PLUS 4
+	else:
+		onlynumbers = [x[1:] for x in all_working_cards]
+		#print(onlynumbers[0]) this a debug
+		#just the numbers in all working cards
+		onlynumbers.sort()
+		#sorts them from least to greatest
+		card_picked = [x for x in all_working_cards if x[0] == 'b' or x[1:] == onlynumbers[-1]]
+		random_num = 0#the number of the card you want to put down
+		#takes the first number in all working cards
+		#print(card_picked) this a debug
+		if (len(card_picked) == 0):
+			card_picked = all_working_cards
+		all_working_cards_randompick = card_picked[random_num]#make this card_picked
+		cards_put_down.append(all_working_cards_randompick)
+		#adds the first card chosen to the cards put down
+		#cards_put_down.append("fizzbuzz") this is a debug
+		AI_three_hand.remove(all_working_cards_randompick)
+		#print(AI_three_hand), a debug
+		#takes the card chosen out of your hand
+		print("AI 3 put down: " + all_working_cards_randompick)
+		print("AI 3 has: " + str(len(AI_three_hand)) + " cards")
+		skip()
+
+def hand_block_test():
+#It will give all inputs and is just a double checker for me
+	return (True if len(player_hand) and len (AI_one_hand) and len(AI_two_hand) and len(AI_three_hand) == 7 else False)
+
+#print(hand_block_test())
+
+while (player_hand == [] or AI_one_hand == [] or AI_two_hand == [] or AI_three_hand == []) == False:
+		[player_turn, AI_one, AI_two, AI_three][turn]()
+		
+
+winner = [x for x in [player_hand, AI_one_hand, AI_two_hand, AI_three_hand] if len(x) == 0]
+
+if winner == [player_hand]:
+	print("congrats! you won against inferior AI, enjoy the small amount of endorphins this gives you as you put off the creeping feeling that somehow you didn't win, no, you never won, this was all a PLOY, CURSE YOU MOREPHEUS")
+else:
+	print("you just lost. To an AI. That literally puts down any random card that works. how do you feel, how do you FEEL, I think we should just sit down and just ponder our existence for a moment, we went through 12 years of formal schooling, TWELVE YEARS, mastered so many skills, so many hours spent doing homework when we could've been socializing and having fun, all to get into a marginally better college and now look at us, we're doing pretty well in college, and now, we lose, to an AI, that puts down random cards. We need to reevaluate our life choices here bub")
